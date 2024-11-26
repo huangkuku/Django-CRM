@@ -11,11 +11,11 @@
     <div class="col-md-6 offset-md-3">
         <h1>test django</h1>
         <br/>
-        <form method="POST" action="{% url 'home' %}">
+        <form method="POST" action="{% url 'home' %}"> <!--url 的'home' 對到 urls.py 的path(..., name='home')-->
             {% csrf_token %}
             <form>
                 <div class="mb-3">                  
-                  <input  type="text" class="form-control" name="first_name" placeholder="User Name" required> <!--type="email" email 改 text 因為要輸入 user name-->                  
+                  <input  type="text" class="form-control" name="username" placeholder="User Name" required> <!--type="email" email 改 text 因為要輸入 user name-->                  
                 </div>
                 <div class="mb-3">                  
                   <input type="password" class="form-control" name="password" placeholder="Password" required>
