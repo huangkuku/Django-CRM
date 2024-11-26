@@ -6,11 +6,15 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          
+          {% if user.is_authenticated %} <!--如果有'登入'則顯示'登出'鈕-->
           <li class="nav-item">
-            <a class="nav-link" href="#">Link</a>
+            <a class="nav-link" href="{% url 'logout' %}">Logout</a>
           </li>
-          
+          {% else %} <!--或沒有'登入'則顯示'登入'鈕-->
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'home' %}">Login</a>
+          </li>
+          {% endif %}
         </ul>
       </div>
     </div>
