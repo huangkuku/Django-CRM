@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% if user.is_authenticated %}
+        {% comment %}
+            user.is_authenticated 是存在的 true 那就呈現...
+        {% endcomment %}
+    <h1>恭喜你登入主頁</h1>
+
+    {% else %}
+    <div class="col-md-6 offset-md-3">
+        <h1>test django</h1>
+        <br/>
+        <form method="POST" action="{% url 'home' %}">
+            {% csrf_token %}
+            <form>
+                <div class="mb-3">                  
+                  <input  type="text" class="form-control" name="first_name" placeholder="User Name" required> <!--type="email" email 改 text 因為要輸入 user name-->                  
+                </div>
+                <div class="mb-3">                  
+                  <input type="password" class="form-control" name="password" placeholder="Password" required>
+                </div>
+                <button type="submit" class="btn btn-secondary">Login</button> <!--btn-primary: primary改成secondary Submit 改成 Login-->
+            </form>
+        </form>
+    </div>
+    {% endif %}
+{% endblock%}
