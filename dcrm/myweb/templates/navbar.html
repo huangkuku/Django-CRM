@@ -10,7 +10,10 @@
           <li class="nav-item">
             <a class="nav-link" href="{% url 'logout' %}">Logout</a>
           </li>
-          {% else %} <!--或沒有'登入'則顯示'登入'鈕-->
+          {% else %} <!--或沒有'登入'則顯示'註冊'或'登入'鈕-->
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'register' %}">Register</a>
+          </li>
           <li class="nav-item">
             <a class="nav-link" href="{% url 'home' %}">Login</a>
           </li>
