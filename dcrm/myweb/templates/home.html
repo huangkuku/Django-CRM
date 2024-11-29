@@ -5,23 +5,56 @@
         {% comment %}
             user.is_authenticated 是存在的 true 那就呈現...
         {% endcomment %}
-    <h1>恭喜你登入主頁</h1>
+        <h1>Records...</h1>
+        <table class="table table-striped table-hover table-bordered">
+            <thead class="table-dark">
+              <tr>
+                <th scope="col">ID</th>
+                <th scope="col">First_Name</th>
+                <th scope="col">Last_Name</th>
+                <th scope="col">Email</th>
+                <th scope="col">Phone</th>
+                <th scope="col">zipcode</th>
+                <th scope="col">state</th>
+                <th scope="col">city</th>
+                <th scope="col">address</th>
+                <th scope="col">created_at</th>
+              </tr>
+            </thead>
+            <tbody>
+            {% if records %} <!--[records] of home function from views.py: return render(request, 'home.html', {'records':records}) form records = Record.objects.all()-->
+                {% for record in records %}
+                    <!-- <div>{{record}}</div> return (f"Welcome! {self.first_name} {self.last_name}") -->
+                    <tr>
+                        <th scope="row"><a href="{% url 'record' record.id %}">{{record.id}}</a></th>
+                        <td>{{ record.first_name }}</td>
+                        <td>{{ record.last_name }}</td>                    
+                        <td>{{ record.email }}</td>
+                        <td>{{ record.phone }}</td>                               
+                        <td>{{ record.zipcode }}</td>
+                        <td>{{ record.state }}</td>
+                        <td>{{ record.city }}</td>
+                        <td>{{ record.address }}</td>
+                        <td>{{ record.created_at }}</td>
+                    </tr>
+                    {% endfor %}
+            {% endif %}
+            </tbody>
+        </table>
 
     {% else %}
     <div class="col-md-6 offset-md-3">
-        <h1>test django</h1>
+        <h1>Login</h1>
         <br/>
         <form method="POST" action="{% url 'home' %}"> <!--url 的'home' 對到 urls.py 的path(..., name='home')-->
-            {% csrf_token %}
-            <form>
+            {% csrf_token %}            
                 <div class="mb-3">                  
-                  <input  type="text" class="form-control" name="username" placeholder="User Name" required> <!--type="email" email 改 text 因為要輸入 user name-->                  
+                  <input  type="text" class="form-control" name="username" placeholder="UserName" required> <!--type="email" email 改 text 因為要輸入 user name-->                  
                 </div>
                 <div class="mb-3">                  
                   <input type="password" class="form-control" name="password" placeholder="Password" required>
                 </div>
                 <button type="submit" class="btn btn-secondary">Login</button> <!--btn-primary: primary改成secondary Submit 改成 Login-->
-            </form>
         </form>
     </div>
     {% endif %}

@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Customer Information</h1>
+<div class="card">
+    <h5 class="card-header">
+        {{customer_record.first_name}}
+        {{customer_record.last_name}}
+    </h5>
+    <div class="card-body">
+        <p class="card-text">
+            <b class="card-title">Email: </b>
+            {{customer_record.email}}
+        </p>
+        <p class="card-text">
+            <b class="card-title">Phone: </b>
+            {{customer_record.phone}}
+        </p>
+        <p class="card-text">
+            <b class="card-title">Zipcode: </b>
+            {{customer_record.zipcode}}
+        </p>
+        <p class="card-text">
+            <b class="card-title">State: </b>
+            {{customer_record.state}}
+        </p> 
+        <p class="card-text">
+            <b class="card-title">Address: </b>
+            {{customer_record.address}}
+        </p> 
+        <p class="card-text">
+            <b class="card-title">Created_at: </b>
+            {{customer_record.created_at}}
+        </p>       
+    </div>
+</div>
+  <br/>
+  <a href="{% url 'home' %}" class="btn btn-secondary">Go Back 回到首頁</a>
+  <a href="{% url 'delete_record' customer_record.id %}" class="btn btn-danger">Delete 刪除</a> <!--這邊是customer_record.id，home.html是 record.id 因為他們自己的畫面的for loop 變數不同，所以各自提取-->
+
+{% endblock %}

@@ -6,6 +6,7 @@ urlpatterns = [
     # path('login/', views.login_user, name='login'),  # name='login' 可以讓我們html的 href="/login/"寫成href="{% url 'login' %}" 方便指認url裡的哪一個path(靠的就是'name'參數)
     path('logout/', views.logout_user, name='logout'),  
     path('register/', views.register_user, name='register'),  
-    
+    path('record/<int:pk>', views.customer_record, name='record'),  # 這裡的pk是primary key 因為id 本身是primary key 你也可以直接寫 id，localhost:8000/record/1、localhost:8000/record/37 pk = 1 or 37
+    path('delete_record/<int:pk>', views.delete_record, name='delete_record'),  
 ]
 # views.home > views.py裡有 'home' function
