@@ -1,6 +1,7 @@
 from django.contrib.auth.forms import UserCreationForm # https://docs.djangoproject.com/en/5.1/topics/auth/customizing/#custom-users-and-the-built-in-auth-forms
 from django.contrib.auth.models import User
 from django import forms        # Django validation and HTML form handling.
+from .models import Record
 
 class SignUpForm(UserCreationForm): # UserCreationForm為django內建的用戶表單，能快速處理用戶註冊基本功能，包含用戶名(username)和密碼password(password1和password2，後者用於確認是否和前者相同)
     email = forms.EmailField(label="", widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'Email Address'}))      
@@ -32,4 +33,22 @@ class SignUpForm(UserCreationForm): # UserCreationForm為django內建的用戶�
         self.fields['password2'].widget.attrs['class'] = 'form-control'
         self.fields['password2'].widget.attrs['placeholder'] = 'Confirm Password'
         self.fields['password2'].label = ''
-        self.fields['password2'].help_text = '<span class="form-text text-muted"><small>Enter the same password as before, for verification.</small></span>'	
+        self.fields['password2'].help_text = '<span class="form-text text-muted"><small>Enter the same password as before, for verification.</small></span>'
+
+
+# Create Add Record Form
+class AddRecordFrom(forms.ModelForm):
+    # 根據 models.py內提到的內容去寫html的格式
+    first_name = forms.CharField(required=True, widget=forms.widgets.TextInput(attrs={'class':'form-control', 'placeholder':'First Name'}),label='')
+    last_name = forms.CharField(required=True, widget=forms.widgets.TextInput(attrs={'class':'form-control', 'placeholder':'Last Name'}),label='')
+    email = forms.CharField(required=True, widget=forms.widgets.TextInput(attrs={'class':'form-control', 'placeholder':'Email'}),label='')
+    phone = forms.CharField(required=True, widget=forms.widgets.TextInput(attrs={'class':'form-control', 'placeholder':'Phone'}),label='')
+    address = forms.CharField(required=True, widget=forms.widgets.TextInput(attrs={'class':'form-control', 'placeholder':'Address'}),label='')
+    city = forms.CharField(required=True, widget=forms.widgets.TextInput(attrs={'class':'form-control', 'placeholder':'City'}),label='')
+    state = forms.CharField(required=True, widget=forms.widgets.TextInput(attrs={'class':'form-control', 'placeholder':'State'}),label='')
+    zipcode = forms.CharField(required=True, widget=forms.widgets.TextInput(attrs={'class':'form-control', 'placeholder':'Zipcode'}),label='')
+
+    class Meta:
+        model = Record # 指定我們要的model: Record
+        exclude = ("user",)
+        # 指定包含的字段(field)fields=['username', '...', ...] or 我們除了哪個其他都要?('不要的user', '空字串是上面的那些變數')

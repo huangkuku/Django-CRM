@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout # 使用者'身分驗證'及'登入、登出'
 from django.contrib import messages # 設置提示訊息，顯示狀態或錯誤通知，例如成功登入或錯誤訊息
-from .form import SignUpForm
+from .form import SignUpForm, AddRecordFrom
 from .models import Record
 
 def home(request):
@@ -68,6 +68,20 @@ def delete_record(request, pk): # pk is from customer_record.id of record.html
         delete_it.delete() # 調用裡面的delete方法
         messages.success(request, 'Record delete successfully.')
         return redirect('home')
+    else:
+        messages.success(request, "You must be logged in to view that page.")
+        return redirect('home')
+
+def add_record(request):
+    form = AddRecordFrom(request.POST or None)
+    if request.user.is_authenticated:
+        if request.method == 'POST':
+            if form.is_valid():
+                add_record = form.save()
+                messages.success(request, 'Record Add Successfully...')
+                return redirect('home')
+        else:
+            return render(request, 'add_record.html', {'form':form})
     else:
         messages.success(request, "You must be logged in to view that page.")
         return redirect('home')
