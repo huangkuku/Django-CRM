@@ -37,5 +37,5 @@
   <br/>
   <a href="{% url 'home' %}" class="btn btn-secondary">Go Back 回到首頁</a>
   <a href="{% url 'delete_record' customer_record.id %}" class="btn btn-danger">Delete 刪除</a> <!--這邊是customer_record.id，home.html是 record.id 因為他們自己的畫面的for loop 變數不同，所以各自提取-->
-
+  <a href="{% url 'update_record' customer_record.id %}" class="btn btn-danger">Update 修改</a>
 {% endblock %}

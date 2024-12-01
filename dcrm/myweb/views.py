@@ -73,7 +73,7 @@ def delete_record(request, pk): # pk is from customer_record.id of record.html
         return redirect('home')
 
 def add_record(request):
-    form = AddRecordFrom(request.POST or None)
+    form = AddRecordFrom(request.POST or None) # 為什麼' or None' they are doing nothing/ they're going to change something and resubmit it
     if request.user.is_authenticated:
         if request.method == 'POST':
             if form.is_valid():
@@ -82,6 +82,19 @@ def add_record(request):
                 return redirect('home')
         else:
             return render(request, 'add_record.html', {'form':form})
+    else:
+        messages.success(request, "You must be logged in to view that page.")
+        return redirect('home')
+
+def update_record(request, pk): # 作法類似delete_record()
+    if request.user.is_authenticated:
+        current_record = Record.objects.get(id=pk)
+        form = AddRecordFrom(request.POST or None, instance = current_record)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Update the record successfully...')
+            return redirect('home')
+        return render(request, 'update_record.html', {'form':form})
     else:
         messages.success(request, "You must be logged in to view that page.")
         return redirect('home')

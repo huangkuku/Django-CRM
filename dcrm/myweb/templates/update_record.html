@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="col-md-6 offset-md-3">
+        <h1>Update Record</h1>
+        <form method="POST">
+            {% csrf_token %}
+
+            {{ form.as_p }} 
+            <!--form 來自 views.py 的 update_record 的 'form'
+            (form = AddRecordFrom(request.POST or None, instance = current_record))
+            -->
+            <br/>
+            <button type="submit" class="btn btn-danger">Update Record 新增</button>
+            
+            <a href="{% url 'home' %}" class="btn btn-secondary">Go Back 回到首頁</a>
+            
+        </form>
+    </div>
+{% endblock %}
