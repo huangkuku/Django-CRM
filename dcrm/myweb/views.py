@@ -3,6 +3,8 @@ from django.contrib.auth import authenticate, login, logout # 使用者'身分�
 from django.contrib import messages # 設置提示訊息，顯示狀態或錯誤通知，例如成功登入或錯誤訊息
 from .form import SignUpForm, AddRecordFrom
 from .models import Record
+from django.db.models import Avg
+import plotly.express as px
 
 def home(request):
     records = Record.objects.all() # objects.all() displays all the records in the database. <QuerySet [<Record: Record object (1)>]>
@@ -96,5 +98,23 @@ def update_record(request, pk): # 作法類似delete_record()
             return redirect('home')
         return render(request, 'update_record.html', {'form':form})
     else:
+        messages.success(request, "You must be logged in to view that page.")
+        return redirect('home')
+    
+def dashborad(request):
+    if request.user.is_authenticated: # 需要使用者登入(身分驗證)
+        average = Record.objects.values('state').annotate(avg=Avg('zipcode'))
+        # average <QuerySet [{'state': '台北市', 'avg': 310.5}, {'state': '台南市', 'avg': 731.0}, {'state': '台中市', 'avg': 406.0}]>
+        x = average.values_list('state', flat=True) 
+        y = average.values_list('avg', flat=True) 
+        text = [f'{avg:.0f}' for avg in y]
+        fig = px.bar(x=x, y=y, text=text, labels={x:'state', y:'avg'})
+        fig.update_layout(title_text='State Distribution',
+                          yaxis_range=[0,800])
+        fig.update_traces(textfont_size=12, textangle=0, textposition="outside", cliponaxis=False)
+        chart = fig.to_html()
+        return render(request, 'dashbord.html', {'chart':chart})
+    else:
+        # pass
         messages.success(request, "You must be logged in to view that page.")
         return redirect('home')

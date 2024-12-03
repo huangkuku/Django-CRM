@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Dashboard</h1>
+{{chart|safe}}
+
+
+<!-- 載入 Plotly 的外部 JavaScript 庫 -->
+<!-- <script src="https://cdn.plot.ly/plotly-latest.min.js"></script> -->
+
+<!-- 定義圖表繪製的 JavaScript  -->
+<!-- <script type="text/javascript">
+    // 從後端傳遞的圖表數據，嵌入到 JavaScript 上下文中
+    var graphData = ;
+
+    // 使用 Plotly 繪製圖表
+    Plotly.newPlot('chart1', graphData.data, graphData.layout);
+</script>  -->
+
+
+{% endblock %}

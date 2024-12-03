@@ -14,4 +14,4 @@ class Record(models.Model):
 
     # 想要在前端畫面顯示的內容
     def __str__(self):
-        return (f"Welcome! {self.first_name} {self.last_name}")
+        return (f"Welcome! {self.first_name} {self.last_name} your stock info: {self.zipcode}")
