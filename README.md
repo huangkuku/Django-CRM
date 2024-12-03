@@ -16,7 +16,7 @@
 ### The app will use MySQL for the database.  
 
 ### View Records
-![image]
+![image](https://github.com/huangkuku/Django-CRM/blob/main/png/view_record%20%E9%A6%96%E9%A0%81.png)
 ### Register
 ![image]
 ### Log In, Log Out
