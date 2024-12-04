@@ -8,7 +8,7 @@
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           {% if user.is_authenticated %} <!--如果有'登入'則顯示'登出'鈕-->
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'dashborad' %}">Dashborad</a>
+            <a class="nav-link" href="{% url 'dashboard' %}">Dashboard</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="{% url 'add_record' %}">Add Record</a>

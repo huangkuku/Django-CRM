@@ -37,14 +37,16 @@ def logout_user(request):
 
 def register_user(request):
     if request.method == 'POST':
-        form = SignUpForm(request.POST)     # request.POST（一個 QueryDict 對象）中提取前端表單的 username 和 password
-        if form.is_valid(): # django 會幫我們根據 form(SignUpForm()) 內容作驗證(by 'is_valid()') 
-        # 如果驗證為True表示通過。如果為False，會自動填充 form.errors
+        form = SignUpForm(request.POST or None)     # request.POST（一個 QueryDict 對象）中提取前端表單的 username 和 password
+        if form.is_valid():                 
+            # django 會幫我們根據 form(SignUpForm()) 內容作驗證(by 'is_valid()') 
+            # 如果驗證為True表示通過。如果為False，會自動填充 form.errors
             form.save() 
             # Authentication and login
             username = form.cleaned_data['username']   # 來自用戶提交表單，包含經過驗證的數據存入cleaned_data from form(SignUpForm())的 'username'
             password = form.cleaned_data['password1']  # from form(SignUpForm())的 'password1'
-            user = authenticate(username=username, password=password) # 第二個 'password'是上一行的'password'變數,源自於 'password1'
+            user = authenticate(username=username, password=password)   
+            # 第二個 'password'是上一行的'password'變數,源自於 'password1'
             # 檢查使用者憑證是否正確(username 和 password )，返回 User 對象（如果正確）或 None。
             login(request,user)
             messages.success(request, 'You have register successfully.')
@@ -75,7 +77,7 @@ def delete_record(request, pk): # pk is from customer_record.id of record.html
         return redirect('home')
 
 def add_record(request):
-    form = AddRecordFrom(request.POST or None) # 為什麼' or None' they are doing nothing/ they're going to change something and resubmit it
+    form = AddRecordFrom(request.POST or None) # 判斷http方法是GET 或 POST 如果是GET則回傳的空表單，如果是POST則傳給modelform檢查表單的內容正不正確
     if request.user.is_authenticated:
         if request.method == 'POST':
             if form.is_valid():
@@ -101,7 +103,7 @@ def update_record(request, pk): # 作法類似delete_record()
         messages.success(request, "You must be logged in to view that page.")
         return redirect('home')
     
-def dashborad(request):
+def dashboard(request):
     if request.user.is_authenticated: # 需要使用者登入(身分驗證)
         average = Record.objects.values('state').annotate(avg=Avg('zipcode'))
         # average <QuerySet [{'state': '台北市', 'avg': 310.5}, {'state': '台南市', 'avg': 731.0}, {'state': '台中市', 'avg': 406.0}]>
@@ -113,7 +115,7 @@ def dashborad(request):
                           yaxis_range=[0,800])
         fig.update_traces(textfont_size=12, textangle=0, textposition="outside", cliponaxis=False)
         chart = fig.to_html()
-        return render(request, 'dashbord.html', {'chart':chart})
+        return render(request, 'dashboard.html', {'chart':chart})
     else:
         # pass
         messages.success(request, "You must be logged in to view that page.")
