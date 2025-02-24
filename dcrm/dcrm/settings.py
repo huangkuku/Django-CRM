@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+from decouple import config # type: ignore
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,12 +21,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-u=3v%vi&mq5e6h_-+_nb^*%5-h9k3!@%^ygtgnd^9(#*p%_bn^'
+SECRET_KEY = config('SECRET_KEY') # 'django-insecure-u=3v%vi&mq5e6h_-+_nb^*%5-h9k3!@%^ygtgnd^9(#*p%_bn^'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost','127.0.0.1']
 
 
 # Application definition
@@ -77,11 +78,15 @@ WSGI_APPLICATION = 'dcrm.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'elderco',
-        'USER':'root',
-        'PASSWORD':'fj03664',
-        'HOST':'localhost',
-        'PORT': '3306'
+        'NAME': config('DB_NAME'),
+        'USER': config('DB_USER'),  #'root'
+        'PASSWORD': config('DB_PASSWORD'), # os.getenv('DB_PASSWORD', 'fj03664'), # ,os.getenv('DB_PASSWORD') 'fj03664'
+        'HOST': config('DB_HOST', default='localhost'),       # config('DB_HOST'), # os.getenv('DB_HOST','localhost')
+        'PORT': config('DB_PORT', default='3306'),
+        'OPTIONS':{
+            'charset': 'utf8mb4',
+        },
+        # # 'SECRET_KEY' : config('SECRET_KEY', default='django-insecure-u=3v%vi&mq5e6h_-+_nb^*%5-h9k3!@%^ygtgnd^9(#*p%_bn^')
     }
 }
 
@@ -110,7 +115,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Taipei'
 
 USE_I18N = True
 

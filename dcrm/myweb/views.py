@@ -7,31 +7,26 @@ from django.db.models import Avg
 import plotly.express as px
 
 def home(request):
-    records = Record.objects.all() # objects.all() displays all the records in the database. <QuerySet [<Record: Record object (1)>]>
+    records = Record.objects.all()
     # 前端form表單送出請求給後端
     if request.method == 'POST':   # 如果請求/request是 post 方法
         # do something in here
         username = request.POST['username'] 
-        password = request.POST['password']
-        # 從 request.POST（一個 QueryDict 對象）中提取前端表單的 username 和 password。這些鍵對應於表單中 <input> 元素的 name 屬性。 
-        # <calss QueryDict> {'csrfmiddlewaretoken': ['O2iB6jWRcGha2ljj0hcMQPSUTv5lvylRTyoCi4rMqJdS316Veu3APaSXdpVCxh19'], 'username': ['Cathy'], 'password': ['16']}
-        
+        password = request.POST['password']        
         # Authenticate
-        user = authenticate(request, username=username, password=password) 
-        # authenticate(request, **keywords) 
-        # 檢查使用者憑證是否正確(username 和 password )，返回 User 對象（如果正確）或 None。
+        user = authenticate(request, username=username, password=password) # authenticate(request, **keywords) 檢查使用者憑證是否正確(username 和 password )
         if user is not None:
-            login(request,user)        # login(request,user) 使用 login 函數登入使用者
+            login(request,user)        # login(request,user) 使用 login() 登入使用者
             messages.success(request, 'You have been logged in.')   # messages.success(request, message)
-            return redirect('home')    # 使用 redirect('home') 重定向到首頁（避免重新提交表單的問題）。
+            return redirect('home')    # 使用 redirect('home') 重定向到首頁，避免重新提交表單。
         else:
             messages.success(request, 'There was an error logged in, please try again.')
             return redirect('home')
-    else:   # 如果前端送出請求是 get 方法 畫面仍是 home.html 這時應該是已登入狀態...?
+    else:   # 如果前端送出請求是 get 方法 畫面是 home.html 的 Login <Form>
         return render(request, 'home.html', {'records':records})
     
 def logout_user(request):
-    logout(request)   # 使用 django 的登出方法 logout()    
+    logout(request)   # 登出方法 logout()    
     messages.success(request, 'You have been logged out ...')  # 提示訊息
     return redirect('home')
 
@@ -39,15 +34,12 @@ def register_user(request):
     if request.method == 'POST':
         form = SignUpForm(request.POST or None)     # request.POST（一個 QueryDict 對象）中提取前端表單的 username 和 password
         if form.is_valid():                 
-            # django 會幫我們根據 form(SignUpForm()) 內容作驗證(by 'is_valid()') 
-            # 如果驗證為True表示通過。如果為False，會自動填充 form.errors
+            # 根據 form(SignUpForm()) 內容作驗證(by 'is_valid()');如果驗證為True表示通過;如果為False，會自動填充 form.errors
             form.save() 
             # Authentication and login
-            username = form.cleaned_data['username']   # 來自用戶提交表單，包含經過驗證的數據存入cleaned_data from form(SignUpForm())的 'username'
-            password = form.cleaned_data['password1']  # from form(SignUpForm())的 'password1'
-            user = authenticate(username=username, password=password)   
-            # 第二個 'password'是上一行的'password'變數,源自於 'password1'
-            # 檢查使用者憑證是否正確(username 和 password )，返回 User 對象（如果正確）或 None。
+            username = form.cleaned_data['username']   # 來自用戶提交表單，包含經過驗證的數據存入 cleaned_data 
+            password = form.cleaned_data['password1']  
+            user = authenticate(username=username, password=password)  
             login(request,user)
             messages.success(request, 'You have register successfully.')
             return redirect('home')
@@ -56,8 +48,8 @@ def register_user(request):
         return render(request, 'register.html', {'form': form})
     return render(request, 'register.html', {'form': form})     # 確保無論什麼情況都能返回一個註冊頁面。
 
-def customer_record(request, pk): # localhost:8000/record/1、localhost:8000/record/37, pk = 1 or 37
-    if request.user.is_authenticated: # request.user(HttpRequest.user from From the AuthenticationMiddleware), An instance of AUTH_USER_MODEL，代表最近地使用者登入，如果使用者沒登入會得到 AnonymousUser物件實例
+def customer_record(request, pk):       # Ex: localhost:8000/record/37, pk = 37
+    if request.user.is_authenticated:   # HttpRequest.user from From the AuthenticationMiddleware 
         # Do something for logged-in users. with is_authenticated
         customer_record = Record.objects.get(id=pk) # id is from migration models
         return render(request, 'record.html', {'customer_record': customer_record})  # send "customer_record" to record.html
@@ -67,9 +59,9 @@ def customer_record(request, pk): # localhost:8000/record/1、localhost:8000/rec
         return redirect('home')
 
 def delete_record(request, pk): # pk is from customer_record.id of record.html
-    if request.user.is_authenticated: # 防止有人沒登入直接輸入delete的url，那會直接觸發刪除的函式的所有動作! 所以要驗證
+    if request.user.is_authenticated: 
         delete_it = Record.objects.get(id=pk) # 建立一個delete_it物件實例
-        delete_it.delete() # 調用裡面的delete方法
+        delete_it.delete() 
         messages.success(request, 'Record delete successfully.')
         return redirect('home')
     else:
@@ -77,7 +69,7 @@ def delete_record(request, pk): # pk is from customer_record.id of record.html
         return redirect('home')
 
 def add_record(request):
-    form = AddRecordFrom(request.POST or None) # 判斷http方法是GET 或 POST 如果是GET則回傳的空表單，如果是POST則傳給modelform檢查表單的內容正不正確
+    form = AddRecordFrom(request.POST or None) 
     if request.user.is_authenticated:
         if request.method == 'POST':
             if form.is_valid():

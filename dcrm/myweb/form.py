@@ -1,19 +1,16 @@
 from django.contrib.auth.forms import UserCreationForm 
 from django.contrib.auth.models import User
-from django import forms        # Django validation and HTML form handling.
+from django import forms        
 from .models import Record
 
-class SignUpForm(UserCreationForm): # UserCreationForm為django內建的用戶表單，能快速處理用戶註冊基本功能，包含用戶名(username)和密碼password(password1和password2，後者用於確認是否和前者相同)
+class SignUpForm(UserCreationForm): # UserCreationForm 包含用戶名(username)和密碼password(password1和password2，後者用於確認是否和前者相同)
     email = forms.EmailField(label="", widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'Email Address'}))      
-    # label="" 空字串表示欄位不顯示標籤(label) 
 
     first_name = forms.CharField(label="", max_length=100, widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'First Name'}))
-    # widget：定義欄位在前端的樣式與屬性，forms.TextInput表示前端顯示為form表單的<Input> type='text'
     
     last_name = forms.CharField(label="", max_length=100, widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'Last Name'}))
-    # 透過 attrs 傳遞 CSS 類別與 placeholder，attrs的class是bootstrap的form-control樣式、 placeholder有提示功能
-    class Meta: # 指定表單的應該使用的model和欄位fields，不用我們再手動逐一指定欄位
-        model = User    # model填入對應之Model; 指定model基於django的 User model (from django.contrib.auth.models)
+    class Meta: # 指定表單的應該使用的model和欄位fields
+        model = User    
         fields = ['username', 'first_name', 'last_name', 'email', 'password1', 'password2'] # 定義哪些欄位會包含在表單中
 
     def __init__(self, *args, **kwargs):
@@ -37,7 +34,7 @@ class SignUpForm(UserCreationForm): # UserCreationForm為django內建的用戶�
 
 
 # Create Add Record Form
-class AddRecordFrom(forms.ModelForm): # 繼承 forms.ModelForm
+class AddRecordFrom(forms.ModelForm): 
     # 根據 models.py內提到的內容去寫html的格式
     first_name = forms.CharField(required=True, widget=forms.widgets.TextInput(attrs={'class':'form-control', 'placeholder':'First Name'}),label='')
     last_name = forms.CharField(required=True, widget=forms.widgets.TextInput(attrs={'class':'form-control', 'placeholder':'Last Name'}),label='')
@@ -51,4 +48,3 @@ class AddRecordFrom(forms.ModelForm): # 繼承 forms.ModelForm
     class Meta:
         model = Record # 指定我們要的model: Record
         exclude = ("user",) # exclude()忽略某個欄位
-        # 指定包含的字段(field)fields=['username', '...', ...] or 我們除了哪個其他都要?('不要的user', (逗號後空白是指上面的那些變數))

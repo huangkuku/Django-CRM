@@ -21,9 +21,8 @@
               </tr>
             </thead>
             <tbody>
-            {% if records %} <!--[records] of home function from views.py: return render(request, 'home.html', {'records':records}) form records = Record.objects.all()-->
-                {% for record in records %}
-                    <!-- <div>{{record}}</div> return (f"Welcome! {self.first_name} {self.last_name}") -->
+            {% if records %} 
+                {% for record in records %}      
                     <tr>
                         <th scope="row"><a href="{% url 'record' record.id %}">{{record.id}}</a></th>
                         <td>
@@ -48,15 +47,15 @@
     <div class="col-md-6 offset-md-3">
         <h1>Login</h1>
         <br/>
-        <form method="POST" action="{% url 'home' %}"> <!--url 的'home' 對到 urls.py 的path(..., name='home')-->
+        <form method="POST" action="{% url 'home' %}"> 
             {% csrf_token %}            
                 <div class="mb-3">                  
-                  <input  type="text" class="form-control" name="username" placeholder="UserName" required> <!--type="email" email 改 text 因為要輸入 user name-->                  
+                  <input  type="text" class="form-control" name="username" placeholder="UserName" required>                   
                 </div>
                 <div class="mb-3">                  
                   <input type="password" class="form-control" name="password" placeholder="Password" required>
                 </div>
-                <button type="submit" class="btn btn-secondary">Login</button> <!--btn-primary: primary改成secondary Submit 改成 Login-->
+                <button type="submit" class="btn btn-secondary">Login</button> 
         </form>
     </div>
     {% endif %}

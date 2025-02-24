@@ -10,7 +10,7 @@ class Record(models.Model):
     address = models.CharField(max_length=50) # 地址 中正路100號1樓
     city = models.CharField(max_length=10) # 區 ex: 中山區
     state = models.CharField(max_length=10) # 縣市 ex:台北市
-    zipcode = models.CharField(max_length=10) # 郵遞區號 # 100
+    zipcode = models.CharField(max_length=10) 
 
     # 想要在終端畫面顯示的內容
     def __str__(self):
