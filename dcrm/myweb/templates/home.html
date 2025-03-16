@@ -5,7 +5,7 @@
         {% comment %}
             user.is_authenticated 是存在的 true 那就呈現...
         {% endcomment %}
-        <h1>Records...</h1>
+        <h1 id="main-header">Records...</h1>
         <table class="table table-striped table-hover table-bordered">
             <thead class="table-dark">
               <tr>
@@ -55,7 +55,7 @@
                 <div class="mb-3">                  
                   <input type="password" class="form-control" name="password" placeholder="Password" required>
                 </div>
-                <button type="submit" class="btn btn-secondary">Login</button> 
+                <button type="submit" id="login" class="btn btn-secondary">Login</button> 
         </form>
     </div>
     {% endif %}
